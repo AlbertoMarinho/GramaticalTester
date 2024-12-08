@@ -4,10 +4,10 @@ def AnalisadorLexico(codigo):
     tokens = []
 
     # Definindo padrões de tokens
-    padraoidentificador = r'[a-zA-Z][a-zA-Z0-9]*'  # Identificadores podem começar com letra
+    padrao_identificador = r'[a-zA-Z_][a-zA-Z0-9_]*'  # Identificadores podem começar com _ ou letra
     padrao_numero = r'\d+'  # Números
-    padrao_operadores = r'[+-*/=]'  # Operadores aritméticos
-    padrao_parenteses = r'[()]'  # Parênteses
+    padrao_operadores = r'[+\-*/=]'  # Operadores aritméticos
+    padrao_parenteses = r'[\(\)]'  # Parênteses
     padrao_ponto_virgula = r';'  # Ponto e vírgula
 
     # Remover espaços em branco
