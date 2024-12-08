@@ -1,6 +1,6 @@
-from lexer import AnalisadorLexico
+from Lexer import AnalisadorLexico
 
-def testeAnalisadorLexico():
+def TesteAnalisadorLexico():
     #Teste de tokens
 
     codigo = input("Digite o Código a ser testado\n")
@@ -20,4 +20,4 @@ def testeAnalisadorLexico():
 
 
 
-testeAnalisadorLexico()
+TesteAnalisadorLexico()
