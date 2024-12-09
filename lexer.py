@@ -2,56 +2,62 @@ import re
 
 def AnalisadorLexico(codigo):
     tokens = []
+    erros = []  # Lista para capturar erros
 
     # Definindo padrões de tokens
-    padraoIdentificador = r'[a-zA-Z_][a-zA-Z0-9_]*'  # Identificadores podem começar com _ ou letra
-    padraoNumero = r'\d+'  # Números
-    padraoOperadores = r'[+\-*/=]'  # Operadores aritméticos
-    padraoParenteses = r'[\(\)]'  # Parênteses
-    padraoPontoVirgula = r';'  # Ponto e vírgula
+    padrao_identificador = r'[a-zA-Z_][a-zA-Z0-9_]*'  # Identificadores podem começar com _ ou letra
+    padrao_numero = r'\d+'  # Números inteiros
+    padrao_operadores = r'[+\-*/=]'  # Operadores aritméticos
+    padrao_operadores_logicos = r'(\|\||&&|!)'  # Operadores lógicos (||, &&, !)
+    padrao_strings = r'"[^"]*"'  # Strings entre aspas
+    padrao_comentarios = r'//[^\n]*'  # Comentários de linha
+    padrao_tipo = r'\b(int|float|bool|double)\b'  # Tipos de dados
+    padrao_parenteses = r'[\(\)]'  # Parênteses
+    padrao_ponto_virgula = r';'  # Ponto e vírgula
+    padrao_palavra_chave = r'\b(if|else|while|return|do)\b'
+    padrao_comparacao = r'(==|!=|<=|>=)'  # Comparações == e !=
+    padrao_delimitadores = r'[\{\}:]'  # Delimitadores: {, }, :
+    padrao_booleano = r'\b(true|false)\b'  # Booleanos
 
     # Remover espaços em branco
     codigo = codigo.strip()
+    posicao = 0  # Posição inicial do analisador
 
     while codigo:
-        codigo = codigo.strip()  # Remove espaços antes de cada iteração
+        codigo = codigo.strip()
+        match = None
 
-        # Identifica identificadores
-        match = re.match(padraoIdentificador, codigo)
+        # Testa cada padrão
+        for padrao, tipo in [
+            (padrao_comentarios, 'COMENTARIOS'),
+            (padrao_numero, 'NUMERO'),
+            (padrao_comparacao, 'COMPARACAO'),
+            (padrao_operadores, 'OPERADOR'),
+            (padrao_operadores_logicos, 'OPERADOR_LOGICO'),
+            (padrao_strings, 'STRING'),
+            (padrao_tipo, 'TIPO'),
+            (padrao_parenteses, 'PARENTESES'),
+            (padrao_ponto_virgula, 'PONTO_VIRGULA'),
+            (padrao_palavra_chave, 'PALAVRA_CHAVE'),
+            (padrao_booleano, 'BOOLEANO'),
+            (padrao_identificador, 'IDENTIFICADOR'),
+            (padrao_delimitadores, 'DELIMITADOR')
+        ]:
+            match = re.match(padrao, codigo)
+            if match:
+                if tipo:  # Apenas adiciona tokens relevantes
+                    tokens.append((tipo, match.group(0), posicao))
+                break
+
         if match:
-            tokens.append(('IDENTIFICADOR', match.group(0)))
+            posicao += match.end()
             codigo = codigo[match.end():]
-            continue
+        else:
+            erros.append(f"Token desconhecido '{codigo[0]}' na posição {posicao}")
+            codigo = codigo[1:]
+            posicao += 1
 
-        # Identifica números
-        match = re.match(padraoNumero, codigo)
-        if match:
-            tokens.append(('NUMERO', match.group(0)))
-            codigo = codigo[match.end():]
-            continue
-
-        # Identifica operadores
-        match = re.match(padraoOperadores, codigo)
-        if match:
-            tokens.append(('OPERADOR', match.group(0)))
-            codigo = codigo[match.end():]
-            continue
-
-        # Identifica parênteses
-        match = re.match(padraoParenteses, codigo)
-        if match:
-            tokens.append(('PARENTESES', match.group(0)))
-            codigo = codigo[match.end():]
-            continue
-
-        # Identifica ponto e vírgula
-        match = re.match(padraoPontoVirgula, codigo)
-        if match:
-            tokens.append(('PONTO_VIRGULA', match.group(0)))
-            codigo = codigo[match.end():]
-            continue
-
-        # Caso haja algum caractere desconhecido
-        raise ValueError(f"Token desconhecido encontrado: {codigo[0]}")
+    if erros:
+        raise ValueError("\n".join(erros))
 
     return tokens
