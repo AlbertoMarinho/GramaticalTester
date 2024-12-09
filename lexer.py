@@ -14,7 +14,7 @@ def AnalisadorLexico(codigo):
     padrao_parenteses = r'[\(\)]'  # Parênteses
     padrao_chaves = r'[\{\}]'  # Chaves
     padrao_ponto_virgula = r';'  # Ponto e vírgula
-    padrao_palavra_chave = r'\b(int|if|else|while|return)\b'
+    padrao_palavra_chave = r'\b(if|else|while|return)\b'
 
     # Remover espaços em branco
     codigo = codigo.strip()
