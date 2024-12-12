@@ -10,7 +10,6 @@ def AnalisadorLexico(codigo):
     padrao_operadores = r'[+\-*/=]'  # Operadores aritméticos
     padrao_operadores_logicos = r'(\|\||&&|!)'  # Operadores lógicos (||, &&, !)
     padrao_strings = r'"[^"]*"'  # Strings entre aspas
-    padrao_comentarios = r'//[^\n]*'  # Comentários de linha
     padrao_tipo = r'\b(int|float|bool|double)\b'  # Tipos de dados
     padrao_parenteses = r'[\(\)]'  # Parênteses
     padrao_ponto_virgula = r';'  # Ponto e vírgula
@@ -29,7 +28,6 @@ def AnalisadorLexico(codigo):
 
         # Testa cada padrão
         for padrao, tipo in [
-            (padrao_comentarios, 'COMENTARIOS'),
             (padrao_numero, 'NUMERO'),
             (padrao_comparacao, 'COMPARACAO'),
             (padrao_operadores, 'OPERADOR'),

@@ -1,4 +1,4 @@
-from Lexer import AnalisadorLexico
+from lexer import AnalisadorLexico
 
 def testeAnalisadorLexico():
     # Teste de tokens
@@ -23,3 +23,4 @@ def testeAnalisadorLexico():
 
 
 testeAnalisadorLexico()
+
